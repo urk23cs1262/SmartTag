@@ -1,0 +1,738 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SmartTag - AI Toll Verification System</title>
+    
+    <!-- Fonts & Icons -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- AOS Animation Library -->
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+    <!-- Modern Preloader -->
+    <div id="preloader">
+        <div class="loader">
+            <div class="car-loader">
+                <i class="fas fa-car-side"></i>
+            </div>
+            <div class="loader-text">SmartTag</div>
+            <div class="loader-progress">
+                <div class="progress-bar"></div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Modern Navbar -->
+    <nav class="navbar glass-effect">
+        <div class="nav-container">
+            <div class="logo">
+                <div class="logo-icon">
+                    <i class="fas fa-car"></i>
+                </div>
+                <span class="logo-text">Smart<span>Tag</span></span>
+            </div>
+            
+            <div class="nav-menu" id="navMenu">
+                <ul class="nav-links">
+                    <li><a href="#home" class="active">Home</a></li>
+                    <li><a href="#features">Features</a></li>
+                    <li><a href="#demo">Live Demo</a></li>
+                    <li><a href="dashboard.html">Dashboard</a></li>
+                    <li><a href="#contact">Contact</a></li>
+                </ul>
+            </div>
+            
+            <div class="nav-actions">
+                <button class="theme-toggle" id="themeToggle" aria-label="Toggle theme">
+                    <i class="fas fa-moon"></i>
+                </button>
+                <button class="mobile-menu-btn" id="mobileMenuBtn" aria-label="Menu">
+                    <i class="fas fa-bars"></i>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Hero Section -->
+    <section id="home" class="hero">
+        <div class="hero-particles" id="particles"></div>
+        <div class="hero-container">
+            <div class="hero-content" data-aos="fade-right" data-aos-duration="1000">
+                <div class="hero-badge">
+                    <span class="badge-pulse"></span>
+                    <span>AI-Powered Solution</span>
+                </div>
+                
+                <h1 class="hero-title">
+                    <span class="gradient-text">SmartTag</span>
+                    <br>
+                    <span class="typewriter" id="typewriter"></span>
+                </h1>
+                
+                <p class="hero-description">
+                    Revolutionizing toll collection with real-time vehicle detection, 
+                    license plate recognition, and intelligent fraud detection using 
+                    advanced machine learning algorithms.
+                </p>
+                
+                <div class="hero-stats">
+                    <div class="stat-item">
+                        <div class="stat-number" data-target="99.5">0</div>
+                        <div class="stat-label">Accuracy Rate</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number" data-target="100">0</div>
+                        <div class="stat-label">Vehicles/min</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number" data-target="24">0</div>
+                        <div class="stat-label">Hour Support</div>
+                    </div>
+                </div>
+                
+                <div class="hero-buttons">
+                    <button class="btn-primary btn-glow" onclick="location.href='#demo'">
+                        <span>Try Live Demo</span>
+                        <i class="fas fa-arrow-right"></i>
+                    </button>
+                    <button class="btn-secondary" onclick="location.href='dashboard.html'">
+                        <i class="fas fa-chart-pie"></i>
+                        <span>View Dashboard</span>
+                    </button>
+                    <button class="btn-play" id="watchDemo" aria-label="Watch demo">
+                        <i class="fas fa-play"></i>
+                    </button>
+                </div>
+            </div>
+            
+            <div class="hero-visual" data-aos="fade-left" data-aos-duration="1000">
+                <div class="floating-card">
+                    <div class="card-inner">
+                        <div class="card-front">
+                            <img src="https://images.unsplash.com/photo-1615392757703-684a8f4bb6e9?ixlib=rb-1.2.1&auto=format&fit=crop&w=1350&q=80" alt="Toll Plaza">
+                            <div class="card-overlay">
+                                <div class="detection-demo">
+                                    <div class="detection-box car"></div>
+                                    <div class="detection-box truck"></div>
+                                    <div class="detection-text">KA51AB1234</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="floating-icon icon-1">
+                    <i class="fas fa-camera"></i>
+                </div>
+                <div class="floating-icon icon-2">
+                    <i class="fas fa-shield-alt"></i>
+                </div>
+                <div class="floating-icon icon-3">
+                    <i class="fas fa-credit-card"></i>
+                </div>
+            </div>
+        </div>
+        
+        <div class="hero-wave">
+            <svg viewBox="0 0 1440 320" preserveAspectRatio="none">
+                <path fill="currentColor" fill-opacity="1" d="M0,96L48,112C96,128,192,160,288,160C384,160,480,128,576,122.7C672,117,768,139,864,154.7C960,171,1056,181,1152,170.7C1248,160,1344,128,1392,112L1440,96L1440,320L1392,320C1344,320,1248,320,1152,320C1056,320,960,320,864,320C768,320,672,320,576,320C480,320,384,320,288,320C192,320,96,320,48,320L0,320Z"></path>
+            </svg>
+        </div>
+    </section>
+
+    <!-- Features Section -->
+    <section id="features" class="features">
+        <div class="container">
+            <div class="section-header" data-aos="fade-up">
+                <span class="section-subtitle">Why Choose Us</span>
+                <h2 class="section-title">Powerful <span class="gradient-text">Features</span></h2>
+                <p class="section-description">
+                    Experience the future of toll collection with our cutting-edge technology
+                </p>
+            </div>
+            
+            <div class="features-grid">
+                <div class="feature-card" data-aos="fade-up" data-aos-delay="100">
+                    <div class="feature-icon">
+                        <i class="fas fa-video"></i>
+                        <div class="icon-glow"></div>
+                    </div>
+                    <h3>Real-time Detection</h3>
+                    <p>YOLOv8-based vehicle detection with 99.5% accuracy and lightning-fast processing speed</p>
+                    <div class="feature-stats">
+                        <div class="stat">
+                            <span class="value">30ms</span>
+                            <span class="label">Response Time</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="feature-card" data-aos="fade-up" data-aos-delay="200">
+                    <div class="feature-icon">
+                        <i class="fas fa-id-card"></i>
+                        <div class="icon-glow"></div>
+                    </div>
+                    <h3>License Plate Recognition</h3>
+                    <p>Advanced OCR technology that reads plates in any condition - day, night, rain, or shine</p>
+                    <div class="feature-stats">
+                        <div class="stat">
+                            <span class="value">98%</span>
+                            <span class="label">Recognition Rate</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="feature-card" data-aos="fade-up" data-aos-delay="300">
+                    <div class="feature-icon">
+                        <i class="fas fa-shield-alt"></i>
+                        <div class="icon-glow"></div>
+                    </div>
+                    <h3>Fraud Detection</h3>
+                    <p>Multi-layer fraud detection system that identifies anomalies with 95% accuracy</p>
+                    <div class="feature-stats">
+                        <div class="stat">
+                            <span class="value">12+</span>
+                            <span class="label">Fraud Types</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="feature-card" data-aos="fade-up" data-aos-delay="400">
+                    <div class="feature-icon">
+                        <i class="fas fa-chart-line"></i>
+                        <div class="icon-glow"></div>
+                    </div>
+                    <h3>Analytics Dashboard</h3>
+                    <p>Comprehensive analytics with real-time insights and predictive forecasting</p>
+                    <div class="feature-stats">
+                        <div class="stat">
+                            <span class="value">24/7</span>
+                            <span class="label">Monitoring</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Live Demo Section -->
+    <section id="demo" class="demo">
+        <div class="container">
+            <div class="section-header" data-aos="fade-up">
+                <span class="section-subtitle">Live Demo</span>
+                <h2 class="section-title">See It In <span class="gradient-text">Action</span></h2>
+                <p class="section-description">
+                    Experience real-time vehicle detection and fraud detection
+                </p>
+            </div>
+            
+            <div class="demo-container" data-aos="fade-up">
+                <div class="demo-tabs">
+                    <button class="tab-btn active" data-tab="camera">
+                        <i class="fas fa-camera"></i>
+                        <span>Live Camera</span>
+                    </button>
+                    <button class="tab-btn" data-tab="upload">
+                        <i class="fas fa-upload"></i>
+                        <span>Upload Video</span>
+                    </button>
+                    <button class="tab-btn" data-tab="sample">
+                        <i class="fas fa-film"></i>
+                        <span>Sample Footage</span>
+                    </button>
+                </div>
+                
+                <div class="demo-content">
+                    <div class="video-panel">
+                        <div class="video-header">
+                            <div class="header-left">
+                                <h3>Camera Feed</h3>
+                                <span class="live-badge">LIVE</span>
+                            </div>
+                            <div class="video-controls">
+                                <button id="startCamera" class="control-btn start" aria-label="Start camera">
+                                    <i class="fas fa-play"></i>
+                                </button>
+                                <button id="stopCamera" class="control-btn stop" disabled aria-label="Stop camera">
+                                    <i class="fas fa-stop"></i>
+                                </button>
+                                <button id="fullscreenBtn" class="control-btn" aria-label="Toggle fullscreen">
+                                    <i class="fas fa-expand"></i>
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <div class="video-feed">
+                            <img id="videoFeed" src="https://via.placeholder.com/640x360/1a1b2f/4361ee?text=SmartTag+Ready" alt="Camera Feed">
+                            <div id="loadingSpinner" class="spinner" style="display: none;"></div>
+                            <div class="feed-overlay">
+                                <div class="detection-overlay" id="detectionOverlay"></div>
+                            </div>
+                            
+                            <input type="file" id="videoUpload" accept="video/*" style="display: none;">
+                            
+                            <div id="uploadPlaceholder" class="upload-placeholder" style="display: none;">
+                                <i class="fas fa-cloud-upload-alt"></i>
+                                <h4>Upload Video File</h4>
+                                <p>Drag and drop or click to select</p>
+                                <button class="btn-primary" onclick="document.getElementById('videoUpload').click()">
+                                    Choose File
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <div class="video-status">
+                            <div class="status-item">
+                                <i class="fas fa-circle"></i>
+                                <span>Status: <span id="connectionStatus">Disconnected</span></span>
+                            </div>
+                            <div class="status-item">
+                                <i class="fas fa-clock"></i>
+                                <span>FPS: <span id="fps">0</span></span>
+                            </div>
+                            <div class="status-item">
+                                <i class="fas fa-microchip"></i>
+                                <span>Processing: <span id="processingTime">0ms</span></span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="results-panel">
+                        <div class="panel-header">
+                            <h3>Detection Results</h3>
+                            <div class="panel-actions">
+                                <button id="clearResults" class="icon-btn" aria-label="Clear results">
+                                    <i class="fas fa-eraser"></i>
+                                </button>
+                                <button id="exportResults" class="icon-btn" aria-label="Export results">
+                                    <i class="fas fa-download"></i>
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <div class="live-stats">
+                            <div class="stat-card">
+                                <div class="stat-icon">
+                                    <i class="fas fa-car"></i>
+                                </div>
+                                <div class="stat-info">
+                                    <span class="stat-value" id="vehicleCount">0</span>
+                                    <span class="stat-label">Vehicles</span>
+                                </div>
+                            </div>
+                            <div class="stat-card">
+                                <div class="stat-icon">
+                                    <i class="fas fa-id-card"></i>
+                                </div>
+                                <div class="stat-info">
+                                    <span class="stat-value" id="plateCount">0</span>
+                                    <span class="stat-label">Plates</span>
+                                </div>
+                            </div>
+                            <div class="stat-card">
+                                <div class="stat-icon">
+                                    <i class="fas fa-exclamation-triangle"></i>
+                                </div>
+                                <div class="stat-info">
+                                    <span class="stat-value" id="fraudCount">0</span>
+                                    <span class="stat-label">Frauds</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="tabs-container">
+                            <div class="tabs-header">
+                                <button class="tab-link active" data-tab="vehicles">
+                                    <i class="fas fa-list"></i>
+                                    Vehicles
+                                </button>
+                                <button class="tab-link" data-tab="fraud">
+                                    <i class="fas fa-exclamation-circle"></i>
+                                    Fraud Alerts
+                                </button>
+                                <button class="tab-link" data-tab="history">
+                                    <i class="fas fa-history"></i>
+                                    History
+                                </button>
+                            </div>
+                            
+                            <div class="tabs-content">
+                                <div id="vehiclesTab" class="tab-pane active">
+                                    <div class="list-header">
+                                        <span>Vehicle</span>
+                                        <span>Plate</span>
+                                        <span>Confidence</span>
+                                    </div>
+                                    <div id="vehicleList" class="vehicle-list">
+                                        <div class="empty-state">
+                                            <i class="fas fa-car"></i>
+                                            <p>No vehicles detected</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div id="fraudTab" class="tab-pane">
+                                    <div class="list-header">
+                                        <span>Type</span>
+                                        <span>Vehicle</span>
+                                        <span>Risk</span>
+                                    </div>
+                                    <div id="fraudList" class="fraud-list">
+                                        <div class="empty-state">
+                                            <i class="fas fa-check-circle"></i>
+                                            <p>No fraud detected</p>
+                                        </div>
+                                    </div>
+                                </div>
+                                
+                                <div id="historyTab" class="tab-pane">
+                                    <div class="timeline" id="timeline"></div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="quick-actions">
+                            <button class="action-btn" onclick="captureSnapshot()">
+                                <i class="fas fa-camera"></i>
+                                Snapshot
+                            </button>
+                            <button class="action-btn" onclick="shareResults()">
+                                <i class="fas fa-share-alt"></i>
+                                Share
+                            </button>
+                            <button class="action-btn" onclick="printReport()">
+                                <i class="fas fa-print"></i>
+                                Print
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- How It Works -->
+    <section class="how-it-works">
+        <div class="container">
+            <div class="section-header" data-aos="fade-up">
+                <span class="section-subtitle">Simple Process</span>
+                <h2 class="section-title">How It <span class="gradient-text">Works</span></h2>
+                <p class="section-description">
+                    Four simple steps to intelligent toll verification
+                </p>
+            </div>
+            
+            <div class="steps-container">
+                <div class="step-item" data-aos="fade-right">
+                    <div class="step-number">1</div>
+                    <div class="step-content">
+                        <h3>Vehicle Detection</h3>
+                        <p>YOLOv8 identifies and classifies vehicles in milliseconds</p>
+                    </div>
+                    <div class="step-preview">
+                        <i class="fas fa-car-side"></i>
+                    </div>
+                </div>
+                
+                <div class="step-item" data-aos="fade-right" data-aos-delay="100">
+                    <div class="step-number">2</div>
+                    <div class="step-content">
+                        <h3>Plate Recognition</h3>
+                        <p>Advanced OCR extracts license plate numbers with high accuracy</p>
+                    </div>
+                    <div class="step-preview">
+                        <i class="fas fa-id-card"></i>
+                    </div>
+                </div>
+                
+                <div class="step-item" data-aos="fade-right" data-aos-delay="200">
+                    <div class="step-number">3</div>
+                    <div class="step-content">
+                        <h3>Database Verification</h3>
+                        <p>Cross-verification with FASTag database in real-time</p>
+                    </div>
+                    <div class="step-preview">
+                        <i class="fas fa-database"></i>
+                    </div>
+                </div>
+                
+                <div class="step-item" data-aos="fade-right" data-aos-delay="300">
+                    <div class="step-number">4</div>
+                    <div class="step-content">
+                        <h3>Fraud Detection</h3>
+                        <p>Intelligent engine identifies anomalies and fraud patterns</p>
+                    </div>
+                    <div class="step-preview">
+                        <i class="fas fa-shield-alt"></i>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Testimonials -->
+    <section class="testimonials">
+        <div class="container">
+            <div class="section-header" data-aos="fade-up">
+                <span class="section-subtitle">Testimonials</span>
+                <h2 class="section-title">What Our <span class="gradient-text">Clients Say</span></h2>
+            </div>
+            
+            <div class="testimonials-slider" data-aos="fade-up">
+                <div class="testimonial-card">
+                    <div class="quote-icon">
+                        <i class="fas fa-quote-right"></i>
+                    </div>
+                    <p class="testimonial-text">
+                        "SmartTag has revolutionized our toll collection system. The accuracy and speed are impressive!"
+                    </p>
+                    <div class="testimonial-author">
+                        <img src="https://randomuser.me/api/portraits/men/1.jpg" alt="Rajesh Kumar">
+                        <div>
+                            <h4>Rajesh Kumar</h4>
+                            <span>NHAI Officer</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="testimonial-card">
+                    <div class="quote-icon">
+                        <i class="fas fa-quote-right"></i>
+                    </div>
+                    <p class="testimonial-text">
+                        "The fraud detection system has saved us millions. Highly recommended!"
+                    </p>
+                    <div class="testimonial-author">
+                        <img src="https://randomuser.me/api/portraits/women/2.jpg" alt="Priya Sharma">
+                        <div>
+                            <h4>Priya Sharma</h4>
+                            <span>Transport Department</span>
+                        </div>
+                    </div>
+                </div>
+                
+                <div class="testimonial-card">
+                    <div class="quote-icon">
+                        <i class="fas fa-quote-right"></i>
+                    </div>
+                    <p class="testimonial-text">
+                        "Implementation was smooth and the support team is excellent. Great product!"
+                    </p>
+                    <div class="testimonial-author">
+                        <img src="https://randomuser.me/api/portraits/men/3.jpg" alt="Amit Patel">
+                        <div>
+                            <h4>Amit Patel</h4>
+                            <span>Toll Plaza Manager</span>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="cta-section">
+        <div class="container">
+            <div class="cta-content" data-aos="zoom-in">
+                <h2>Ready to Transform Your Toll Collection?</h2>
+                <p>Join hundreds of satisfied clients using SmartTag for intelligent toll verification</p>
+                <div class="cta-buttons">
+                    <button class="btn-primary btn-glow" onclick="location.href='#demo'">
+                        Get Started Now
+                    </button>
+                    <button class="btn-secondary" onclick="location.href='#contact'">
+                        Contact Sales
+                    </button>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Contact Section -->
+    <section id="contact" class="contact">
+        <div class="container">
+            <div class="section-header" data-aos="fade-up">
+                <span class="section-subtitle">Get In Touch</span>
+                <h2 class="section-title">Contact <span class="gradient-text">Us</span></h2>
+            </div>
+            
+            <div class="contact-container" data-aos="fade-up">
+                <div class="contact-info">
+                    <div class="info-card">
+                        <div class="info-icon">
+                            <i class="fas fa-map-marker-alt"></i>
+                        </div>
+                        <div class="info-content">
+                            <h4>Visit Us</h4>
+                            <p>SmartTag Technologies, Innovation Hub, Bangalore - 560001</p>
+                        </div>
+                    </div>
+                    
+                    <div class="info-card">
+                        <div class="info-icon">
+                            <i class="fas fa-phone-alt"></i>
+                        </div>
+                        <div class="info-content">
+                            <h4>Call Us</h4>
+                            <p>+91 98765 43210</p>
+                            <p>+91 87654 32109</p>
+                        </div>
+                    </div>
+                    
+                    <div class="info-card">
+                        <div class="info-icon">
+                            <i class="fas fa-envelope"></i>
+                        </div>
+                        <div class="info-content">
+                            <h4>Email Us</h4>
+                            <p>info@smarttag.com</p>
+                            <p>support@smarttag.com</p>
+                        </div>
+                    </div>
+                    
+                    <div class="social-links">
+                        <a href="#" class="social-link" aria-label="Facebook"><i class="fab fa-facebook-f"></i></a>
+                        <a href="#" class="social-link" aria-label="Twitter"><i class="fab fa-twitter"></i></a>
+                        <a href="#" class="social-link" aria-label="LinkedIn"><i class="fab fa-linkedin-in"></i></a>
+                        <a href="#" class="social-link" aria-label="Instagram"><i class="fab fa-instagram"></i></a>
+                        <a href="#" class="social-link" aria-label="YouTube"><i class="fab fa-youtube"></i></a>
+                    </div>
+                </div>
+                
+                <div class="contact-form-container">
+                    <form id="contactForm" class="contact-form">
+                        <div class="form-group">
+                            <input type="text" id="name" placeholder="Your Name" required>
+                            <i class="fas fa-user"></i>
+                        </div>
+                        
+                        <div class="form-group">
+                            <input type="email" id="email" placeholder="Your Email" required>
+                            <i class="fas fa-envelope"></i>
+                        </div>
+                        
+                        <div class="form-group">
+                            <input type="tel" id="phone" placeholder="Phone Number">
+                            <i class="fas fa-phone"></i>
+                        </div>
+                        
+                        <div class="form-group">
+                            <select id="subject">
+                                <option value="">Select Subject</option>
+                                <option value="demo">Request Demo</option>
+                                <option value="support">Technical Support</option>
+                                <option value="sales">Sales Inquiry</option>
+                                <option value="other">Other</option>
+                            </select>
+                            <i class="fas fa-chevron-down"></i>
+                        </div>
+                        
+                        <div class="form-group">
+                            <textarea id="message" placeholder="Your Message" rows="5" required></textarea>
+                            <i class="fas fa-pen"></i>
+                        </div>
+                        
+                        <button type="submit" class="btn-primary btn-full">
+                            <span>Send Message</span>
+                            <i class="fas fa-paper-plane"></i>
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-wave">
+            <svg viewBox="0 0 1440 120" preserveAspectRatio="none">
+                <path fill="currentColor" fill-opacity="1" d="M0,32L48,37.3C96,43,192,53,288,58.7C384,64,480,64,576,58.7C672,53,768,43,864,48C960,53,1056,75,1152,80C1248,85,1344,75,1392,69.3L1440,64L1440,0L1392,0C1344,0,1248,0,1152,0C1056,0,960,0,864,0C768,0,672,0,576,0C480,0,384,0,288,0C192,0,96,0,48,0L0,0Z"></path>
+            </svg>
+        </div>
+        
+        <div class="footer-content">
+            <div class="container">
+                <div class="footer-grid">
+                    <div class="footer-col">
+                        <div class="footer-logo">
+                            <i class="fas fa-car"></i>
+                            <span>Smart<span>Tag</span></span>
+                        </div>
+                        <p>Revolutionizing toll collection with AI-powered verification and fraud detection.</p>
+                        <div class="newsletter">
+                            <h4>Subscribe to Newsletter</h4>
+                            <div class="newsletter-form">
+                                <input type="email" placeholder="Your email" aria-label="Email for newsletter">
+                                <button aria-label="Subscribe"><i class="fas fa-paper-plane"></i></button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="footer-col">
+                        <h4>Quick Links</h4>
+                        <ul>
+                            <li><a href="#home"><i class="fas fa-chevron-right"></i> Home</a></li>
+                            <li><a href="#features"><i class="fas fa-chevron-right"></i> Features</a></li>
+                            <li><a href="#demo"><i class="fas fa-chevron-right"></i> Live Demo</a></li>
+                            <li><a href="dashboard.html"><i class="fas fa-chevron-right"></i> Dashboard</a></li>
+                            <li><a href="#contact"><i class="fas fa-chevron-right"></i> Contact</a></li>
+                        </ul>
+                    </div>
+                    
+                    <div class="footer-col">
+                        <h4>Resources</h4>
+                        <ul>
+                            <li><a href="#"><i class="fas fa-chevron-right"></i> Documentation</a></li>
+                            <li><a href="#"><i class="fas fa-chevron-right"></i> API Reference</a></li>
+                            <li><a href="#"><i class="fas fa-chevron-right"></i> Tutorials</a></li>
+                            <li><a href="#"><i class="fas fa-chevron-right"></i> Blog</a></li>
+                            <li><a href="#"><i class="fas fa-chevron-right"></i> Support</a></li>
+                        </ul>
+                    </div>
+                    
+                    <div class="footer-col">
+                        <h4>Legal</h4>
+                        <ul>
+                            <li><a href="#"><i class="fas fa-chevron-right"></i> Privacy Policy</a></li>
+                            <li><a href="#"><i class="fas fa-chevron-right"></i> Terms of Service</a></li>
+                            <li><a href="#"><i class="fas fa-chevron-right"></i> Cookie Policy</a></li>
+                            <li><a href="#"><i class="fas fa-chevron-right"></i> GDPR Compliance</a></li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+        
+        <div class="footer-bottom">
+            <div class="container">
+                <p>&copy; 2024 SmartTag Technologies. All rights reserved.</p>
+                <div class="footer-links">
+                    <a href="#">Privacy</a>
+                    <a href="#">Terms</a>
+                    <a href="#">Sitemap</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+
+    <!-- Back to Top Button -->
+    <button id="backToTop" class="back-to-top" aria-label="Back to top">
+        <i class="fas fa-arrow-up"></i>
+    </button>
+
+    <!-- Notification Container -->
+    <div id="notificationContainer" class="notification-container"></div>
+
+    <!-- Scripts -->
+    <script src="https://cdn.socket.io/4.5.4/socket.io.min.js"></script>
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script src="script.js"></script>
+</body>
+</html>

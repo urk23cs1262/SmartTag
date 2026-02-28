@@ -1,0 +1,1331 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>SmartTag Dashboard - Analytics & Insights</title>
+    
+    <!-- Fonts & Icons -->
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- AOS Animation -->
+    <link href="https://unpkg.com/aos@2.3.1/dist/aos.css" rel="stylesheet">
+    
+    <!-- Chart.js -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    
+    <!-- Custom CSS -->
+    <link rel="stylesheet" href="styles.css">
+    
+    <style>
+        /* Dashboard Specific Styles */
+        :root {
+            --dashboard-primary: #4361ee;
+            --dashboard-success: #4cc9f0;
+            --dashboard-warning: #f8961e;
+            --dashboard-danger: #f94144;
+            --dashboard-dark: #1e1e2f;
+            --dashboard-light: #f8f9fa;
+            --dashboard-card: #ffffff;
+            --dashboard-text: #2b2d42;
+            --dashboard-text-light: #8d99ae;
+            --dashboard-border: #e9ecef;
+            --dashboard-shadow: 0 10px 30px rgba(0, 0, 0, 0.1);
+            --dashboard-glow: 0 0 20px rgba(67, 97, 238, 0.3);
+        }
+
+        .dark-theme {
+            --dashboard-dark: #0b0c10;
+            --dashboard-light: #1a1b2f;
+            --dashboard-card: #2b2d42;
+            --dashboard-text: #edf2fb;
+            --dashboard-text-light: #a9b7d0;
+            --dashboard-border: #3d405b;
+        }
+
+        body {
+            background: linear-gradient(135deg, var(--dashboard-light) 0%, var(--dashboard-dark) 100%);
+            min-height: 100vh;
+            font-family: 'Inter', sans-serif;
+        }
+
+        /* Modern Navbar */
+        .navbar {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .navbar.scrolled {
+            background: var(--dashboard-card);
+            box-shadow: var(--dashboard-shadow);
+        }
+
+        /* Dashboard Container */
+        .dashboard {
+            max-width: 1400px;
+            margin: 100px auto 50px;
+            padding: 0 30px;
+        }
+
+        /* Dashboard Header */
+        .dashboard-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 40px;
+            padding: 20px;
+            background: var(--dashboard-card);
+            border-radius: 20px;
+            box-shadow: var(--dashboard-shadow);
+            border: 1px solid var(--dashboard-border);
+            animation: slideDown 0.5s ease;
+        }
+
+        @keyframes slideDown {
+            from {
+                opacity: 0;
+                transform: translateY(-20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .dashboard-header h1 {
+            font-size: 2rem;
+            font-weight: 700;
+            background: linear-gradient(135deg, var(--dashboard-primary), var(--dashboard-success));
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            background-clip: text;
+            margin: 0;
+        }
+
+        .dashboard-controls {
+            display: flex;
+            gap: 15px;
+            align-items: center;
+        }
+
+        .dashboard-controls select {
+            padding: 12px 20px;
+            border: 2px solid var(--dashboard-border);
+            border-radius: 12px;
+            background: var(--dashboard-card);
+            color: var(--dashboard-text);
+            font-weight: 500;
+            cursor: pointer;
+            transition: all 0.3s ease;
+            outline: none;
+        }
+
+        .dashboard-controls select:hover {
+            border-color: var(--dashboard-primary);
+        }
+
+        .dashboard-controls button {
+            padding: 12px 25px;
+            background: var(--dashboard-primary);
+            color: white;
+            border: none;
+            border-radius: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            transition: all 0.3s ease;
+        }
+
+        .dashboard-controls button:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--dashboard-glow);
+        }
+
+        /* KPI Grid */
+        .kpi-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 25px;
+            margin-bottom: 40px;
+        }
+
+        .kpi-card {
+            background: var(--dashboard-card);
+            border-radius: 20px;
+            padding: 25px;
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            box-shadow: var(--dashboard-shadow);
+            border: 1px solid var(--dashboard-border);
+            transition: all 0.3s ease;
+            animation: fadeInUp 0.5s ease backwards;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .kpi-card:nth-child(1) { animation-delay: 0.1s; }
+        .kpi-card:nth-child(2) { animation-delay: 0.2s; }
+        .kpi-card:nth-child(3) { animation-delay: 0.3s; }
+        .kpi-card:nth-child(4) { animation-delay: 0.4s; }
+
+        @keyframes fadeInUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .kpi-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 4px;
+            background: linear-gradient(90deg, var(--dashboard-primary), var(--dashboard-success));
+            transform: scaleX(0);
+            transform-origin: left;
+            transition: transform 0.3s ease;
+        }
+
+        .kpi-card:hover::before {
+            transform: scaleX(1);
+        }
+
+        .kpi-card:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--dashboard-glow);
+        }
+
+        .kpi-icon {
+            width: 70px;
+            height: 70px;
+            background: linear-gradient(135deg, var(--dashboard-primary), var(--dashboard-success));
+            border-radius: 18px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 2rem;
+            color: white;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .kpi-icon::after {
+            content: '';
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(45deg, transparent, rgba(255, 255, 255, 0.3));
+            top: -100%;
+            left: -100%;
+            transition: all 0.5s ease;
+        }
+
+        .kpi-card:hover .kpi-icon::after {
+            top: 0;
+            left: 0;
+        }
+
+        .kpi-content h3 {
+            font-size: 1rem;
+            color: var(--dashboard-text-light);
+            margin-bottom: 8px;
+            font-weight: 500;
+        }
+
+        .kpi-value {
+            font-size: 2.2rem;
+            font-weight: 700;
+            color: var(--dashboard-text);
+            line-height: 1.2;
+            display: block;
+        }
+
+        /* Charts Grid */
+        .charts-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 25px;
+            margin-bottom: 40px;
+        }
+
+        .chart-container {
+            background: var(--dashboard-card);
+            border-radius: 20px;
+            padding: 25px;
+            box-shadow: var(--dashboard-shadow);
+            border: 1px solid var(--dashboard-border);
+            transition: all 0.3s ease;
+            animation: fadeIn 0.5s ease backwards;
+        }
+
+        .chart-container:nth-child(1) { animation-delay: 0.2s; }
+        .chart-container:nth-child(2) { animation-delay: 0.3s; }
+        .chart-container:nth-child(3) { animation-delay: 0.4s; }
+        .chart-container:nth-child(4) { animation-delay: 0.5s; }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .chart-container:hover {
+            transform: translateY(-5px);
+            box-shadow: var(--dashboard-glow);
+        }
+
+        .chart-container h3 {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: var(--dashboard-text);
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid var(--dashboard-border);
+            position: relative;
+        }
+
+        .chart-container h3::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            width: 50px;
+            height: 2px;
+            background: var(--dashboard-primary);
+        }
+
+        .chart-container canvas {
+            width: 100% !important;
+            height: 300px !important;
+        }
+
+        /* Recent Transactions */
+        .recent-transactions {
+            background: var(--dashboard-card);
+            border-radius: 20px;
+            padding: 25px;
+            box-shadow: var(--dashboard-shadow);
+            border: 1px solid var(--dashboard-border);
+            animation: slideUp 0.5s ease 0.6s backwards;
+        }
+
+        @keyframes slideUp {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .recent-transactions h3 {
+            font-size: 1.2rem;
+            font-weight: 600;
+            color: var(--dashboard-text);
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 2px solid var(--dashboard-border);
+            position: relative;
+        }
+
+        .recent-transactions h3::after {
+            content: '';
+            position: absolute;
+            bottom: -2px;
+            left: 0;
+            width: 50px;
+            height: 2px;
+            background: var(--dashboard-primary);
+        }
+
+        /* Table Styles */
+        .table-container {
+            overflow-x: auto;
+            border-radius: 12px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 0.95rem;
+        }
+
+        thead tr {
+            background: linear-gradient(135deg, var(--dashboard-primary), var(--dashboard-success));
+        }
+
+        th {
+            padding: 15px 20px;
+            text-align: left;
+            font-weight: 600;
+            color: white;
+            font-size: 0.95rem;
+            white-space: nowrap;
+        }
+
+        th:first-child {
+            border-top-left-radius: 12px;
+        }
+
+        th:last-child {
+            border-top-right-radius: 12px;
+        }
+
+        td {
+            padding: 15px 20px;
+            border-bottom: 1px solid var(--dashboard-border);
+            color: var(--dashboard-text);
+            white-space: nowrap;
+        }
+
+        tbody tr {
+            transition: all 0.3s ease;
+        }
+
+        tbody tr:hover {
+            background: rgba(67, 97, 238, 0.05);
+            transform: scale(1.01);
+            box-shadow: var(--dashboard-shadow);
+        }
+
+        /* Status Badges */
+        .status-badge {
+            padding: 6px 12px;
+            border-radius: 30px;
+            font-size: 0.85rem;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .status-verified {
+            background: rgba(76, 201, 240, 0.1);
+            color: var(--dashboard-success);
+            border: 1px solid rgba(76, 201, 240, 0.3);
+        }
+
+        .status-fraud {
+            background: rgba(249, 65, 68, 0.1);
+            color: var(--dashboard-danger);
+            border: 1px solid rgba(249, 65, 68, 0.3);
+        }
+
+        .status-pending {
+            background: rgba(248, 150, 30, 0.1);
+            color: var(--dashboard-warning);
+            border: 1px solid rgba(248, 150, 30, 0.3);
+        }
+
+        /* Confidence Badge */
+        .confidence-badge {
+            background: var(--dashboard-primary);
+            color: white;
+            padding: 4px 8px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 600;
+        }
+
+        /* Loading State */
+        .loading {
+            text-align: center;
+            padding: 50px;
+            color: var(--dashboard-text-light);
+        }
+
+        .loading i {
+            font-size: 3rem;
+            margin-bottom: 15px;
+            color: var(--dashboard-primary);
+            animation: spin 2s linear infinite;
+        }
+
+        @keyframes spin {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+
+        /* Quick Stats Footer */
+        .quick-stats {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 20px;
+            margin-top: 30px;
+        }
+
+        .quick-stat {
+            background: var(--dashboard-card);
+            border-radius: 15px;
+            padding: 15px;
+            text-align: center;
+            border: 1px solid var(--dashboard-border);
+        }
+
+        .quick-stat .label {
+            font-size: 0.9rem;
+            color: var(--dashboard-text-light);
+            margin-bottom: 5px;
+        }
+
+        .quick-stat .value {
+            font-size: 1.2rem;
+            font-weight: 700;
+            color: var(--dashboard-primary);
+        }
+
+        /* Responsive Design */
+        @media (max-width: 1200px) {
+            .kpi-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            .charts-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .dashboard {
+                padding: 0 20px;
+                margin-top: 80px;
+            }
+            
+            .dashboard-header {
+                flex-direction: column;
+                gap: 20px;
+                text-align: center;
+            }
+            
+            .kpi-grid {
+                grid-template-columns: 1fr;
+            }
+            
+            .quick-stats {
+                grid-template-columns: repeat(2, 1fr);
+            }
+            
+            td, th {
+                padding: 10px 12px;
+                font-size: 0.85rem;
+            }
+        }
+
+        @media (max-width: 480px) {
+            .dashboard-controls {
+                flex-direction: column;
+                width: 100%;
+            }
+            
+            .dashboard-controls select,
+            .dashboard-controls button {
+                width: 100%;
+            }
+            
+            .quick-stats {
+                grid-template-columns: 1fr;
+            }
+        }
+
+        /* Export Button */
+        .export-btn {
+            background: linear-gradient(135deg, var(--dashboard-success), var(--dashboard-primary));
+            color: white;
+            border: none;
+            padding: 12px 25px;
+            border-radius: 12px;
+            font-weight: 600;
+            cursor: pointer;
+            display: inline-flex;
+            align-items: center;
+            gap: 10px;
+            margin-left: 15px;
+            transition: all 0.3s ease;
+        }
+
+        .export-btn:hover {
+            transform: translateY(-2px);
+            box-shadow: var(--dashboard-glow);
+        }
+
+        /* Date Range Picker Custom */
+        .date-range {
+            display: flex;
+            gap: 10px;
+            align-items: center;
+        }
+
+        .date-input {
+            padding: 10px;
+            border: 2px solid var(--dashboard-border);
+            border-radius: 10px;
+            background: var(--dashboard-card);
+            color: var(--dashboard-text);
+        }
+
+        /* Tooltip */
+        [data-tooltip] {
+            position: relative;
+            cursor: help;
+        }
+
+        [data-tooltip]:before {
+            content: attr(data-tooltip);
+            position: absolute;
+            bottom: 100%;
+            left: 50%;
+            transform: translateX(-50%);
+            padding: 5px 10px;
+            background: var(--dashboard-dark);
+            color: white;
+            border-radius: 5px;
+            font-size: 0.8rem;
+            white-space: nowrap;
+            opacity: 0;
+            visibility: hidden;
+            transition: all 0.3s ease;
+        }
+
+        [data-tooltip]:hover:before {
+            opacity: 1;
+            visibility: visible;
+            bottom: 120%;
+        }
+
+        /* Chart Legends */
+        .chart-legend {
+            display: flex;
+            gap: 20px;
+            flex-wrap: wrap;
+            margin-top: 15px;
+            padding-top: 15px;
+            border-top: 1px solid var(--dashboard-border);
+        }
+
+        .legend-item {
+            display: flex;
+            align-items: center;
+            gap: 8px;
+            font-size: 0.9rem;
+        }
+
+        .legend-color {
+            width: 12px;
+            height: 12px;
+            border-radius: 4px;
+        }
+
+        /* Progress Bars */
+        .progress-container {
+            margin-top: 20px;
+        }
+
+        .progress-item {
+            margin-bottom: 15px;
+        }
+
+        .progress-header {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 5px;
+            font-size: 0.9rem;
+        }
+
+        .progress-bar {
+            height: 8px;
+            background: var(--dashboard-border);
+            border-radius: 4px;
+            overflow: hidden;
+        }
+
+        .progress-fill {
+            height: 100%;
+            background: linear-gradient(90deg, var(--dashboard-primary), var(--dashboard-success));
+            border-radius: 4px;
+            transition: width 1s ease;
+        }
+    </style>
+</head>
+<body>
+    <!-- Modern Navbar -->
+    <nav class="navbar glass-effect">
+        <div class="nav-container">
+            <div class="logo">
+                <div class="logo-icon">
+                    <i class="fas fa-car"></i>
+                </div>
+                <span class="logo-text">Smart<span>Tag</span></span>
+            </div>
+            
+            <div class="nav-menu" id="navMenu">
+                <ul class="nav-links">
+                    <li><a href="index.html">Home</a></li>
+                    <li><a href="index.html#features">Features</a></li>
+                    <li><a href="index.html#demo">Live Demo</a></li>
+                    <li><a href="#dashboard" class="active">Dashboard</a></li>
+                    <li><a href="index.html#contact">Contact</a></li>
+                </ul>
+            </div>
+            
+            <div class="nav-actions">
+                <button class="theme-toggle" id="themeToggle">
+                    <i class="fas fa-moon"></i>
+                </button>
+                <button class="mobile-menu-btn" id="mobileMenuBtn">
+                    <i class="fas fa-bars"></i>
+                </button>
+            </div>
+        </div>
+    </nav>
+
+    <!-- Main Dashboard -->
+    <div class="dashboard">
+        <!-- Dashboard Header -->
+        <div class="dashboard-header">
+            <div>
+                <h1>Analytics Dashboard</h1>
+                <p style="color: var(--dashboard-text-light); margin-top: 5px;">
+                    <i class="fas fa-calendar-alt" style="margin-right: 5px;"></i>
+                    Last updated: <span id="lastUpdated">Just now</span>
+                </p>
+            </div>
+            <div class="dashboard-controls">
+                <div class="date-range">
+                    <select id="timeRange">
+                        <option value="24h">Last 24 Hours</option>
+                        <option value="7d">Last 7 Days</option>
+                        <option value="30d">Last 30 Days</option>
+                        <option value="90d">Last 90 Days</option>
+                        <option value="all">All Time</option>
+                    </select>
+                    <input type="date" class="date-input" id="startDate" placeholder="Start Date">
+                    <input type="date" class="date-input" id="endDate" placeholder="End Date">
+                </div>
+                <button id="refreshData" class="btn-small">
+                    <i class="fas fa-sync-alt"></i> Refresh
+                </button>
+                <button id="exportData" class="export-btn">
+                    <i class="fas fa-download"></i> Export
+                </button>
+            </div>
+        </div>
+
+        <!-- KPI Cards -->
+        <div class="kpi-grid">
+            <div class="kpi-card" data-aos="fade-up" data-aos-delay="100">
+                <div class="kpi-icon">
+                    <i class="fas fa-car"></i>
+                </div>
+                <div class="kpi-content">
+                    <h3>Total Vehicles</h3>
+                    <span id="totalVehicles" class="kpi-value">0</span>
+                    <small style="color: var(--dashboard-text-light);">
+                        <i class="fas fa-arrow-up" style="color: var(--dashboard-success);"></i> +12% from last period
+                    </small>
+                </div>
+            </div>
+            
+            <div class="kpi-card" data-aos="fade-up" data-aos-delay="200">
+                <div class="kpi-icon">
+                    <i class="fas fa-exclamation-triangle"></i>
+                </div>
+                <div class="kpi-content">
+                    <h3>Fraud Detected</h3>
+                    <span id="totalFraud" class="kpi-value">0</span>
+                    <small style="color: var(--dashboard-text-light);">
+                        <i class="fas fa-arrow-down" style="color: var(--dashboard-danger);"></i> -3% from last period
+                    </small>
+                </div>
+            </div>
+            
+            <div class="kpi-card" data-aos="fade-up" data-aos-delay="300">
+                <div class="kpi-icon">
+                    <i class="fas fa-percent"></i>
+                </div>
+                <div class="kpi-content">
+                    <h3>Fraud Rate</h3>
+                    <span id="fraudRate" class="kpi-value">0%</span>
+                    <small style="color: var(--dashboard-text-light);">
+                        Target: < 5%
+                    </small>
+                </div>
+            </div>
+            
+            <div class="kpi-card" data-aos="fade-up" data-aos-delay="400">
+                <div class="kpi-icon">
+                    <i class="fas fa-check-circle"></i>
+                </div>
+                <div class="kpi-content">
+                    <h3>Accuracy</h3>
+                    <span id="accuracy" class="kpi-value">98%</span>
+                    <small style="color: var(--dashboard-text-light);">
+                        <i class="fas fa-star" style="color: gold;"></i> Top performer
+                    </small>
+                </div>
+            </div>
+        </div>
+
+        <!-- Charts Grid -->
+        <div class="charts-grid">
+            <!-- Fraud Distribution Chart -->
+            <div class="chart-container" data-aos="fade-up" data-aos-delay="100">
+                <h3>
+                    <i class="fas fa-pie-chart" style="margin-right: 10px; color: var(--dashboard-primary);"></i>
+                    Fraud Distribution
+                </h3>
+                <canvas id="fraudChart"></canvas>
+                <div class="chart-legend" id="fraudLegend"></div>
+            </div>
+            
+            <!-- Vehicle Distribution Chart -->
+            <div class="chart-container" data-aos="fade-up" data-aos-delay="200">
+                <h3>
+                    <i class="fas fa-chart-bar" style="margin-right: 10px; color: var(--dashboard-success);"></i>
+                    Vehicle Distribution
+                </h3>
+                <canvas id="vehicleChart"></canvas>
+                <div class="progress-container" id="vehicleProgress"></div>
+            </div>
+            
+            <!-- Hourly Transactions Chart -->
+            <div class="chart-container" data-aos="fade-up" data-aos-delay="300">
+                <h3>
+                    <i class="fas fa-chart-line" style="margin-right: 10px; color: var(--dashboard-warning);"></i>
+                    Hourly Transactions
+                </h3>
+                <canvas id="hourlyChart"></canvas>
+                <div class="quick-stats" id="hourlyStats"></div>
+            </div>
+            
+            <!-- Detection Performance Chart -->
+            <div class="chart-container" data-aos="fade-up" data-aos-delay="400">
+                <h3>
+                    <i class="fas fa-radar" style="margin-right: 10px; color: var(--dashboard-danger);"></i>
+                    Detection Performance
+                </h3>
+                <canvas id="performanceChart"></canvas>
+                <div class="quick-stats" id="performanceStats">
+                    <div class="quick-stat">
+                        <div class="label">Detection Rate</div>
+                        <div class="value">99.2%</div>
+                    </div>
+                    <div class="quick-stat">
+                        <div class="label">OCR Success</div>
+                        <div class="value">97.8%</div>
+                    </div>
+                    <div class="quick-stat">
+                        <div class="label">Fraud Detection</div>
+                        <div class="value">94.5%</div>
+                    </div>
+                    <div class="quick-stat">
+                        <div class="label">Response Time</div>
+                        <div class="value">32ms</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Recent Transactions -->
+        <div class="recent-transactions" data-aos="fade-up" data-aos-delay="500">
+            <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 20px;">
+                <h3>
+                    <i class="fas fa-history" style="margin-right: 10px; color: var(--dashboard-primary);"></i>
+                    Recent Transactions
+                </h3>
+                <div>
+                    <button class="btn-small" id="refreshTransactions">
+                        <i class="fas fa-sync-alt"></i> Refresh
+                    </button>
+                </div>
+            </div>
+            <div class="table-container">
+                <table id="transactionsTable">
+                    <thead>
+                        <tr>
+                            <th>Timestamp</th>
+                            <th>Plate Number</th>
+                            <th>Vehicle Class</th>
+                            <th>Fraud Type</th>
+                            <th>Confidence</th>
+                            <th>Status</th>
+                            <th>Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="transactionsBody">
+                        <tr>
+                            <td colspan="7" class="loading">
+                                <i class="fas fa-spinner fa-spin"></i>
+                                <div>Loading transactions...</div>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            
+            <!-- Pagination -->
+            <div style="display: flex; justify-content: flex-end; gap: 10px; margin-top: 20px;">
+                <button class="btn-small" id="prevPage" disabled>
+                    <i class="fas fa-chevron-left"></i> Previous
+                </button>
+                <span style="color: var(--dashboard-text); padding: 8px 15px;">
+                    Page <span id="currentPage">1</span> of <span id="totalPages">1</span>
+                </span>
+                <button class="btn-small" id="nextPage">
+                    Next <i class="fas fa-chevron-right"></i>
+                </button>
+            </div>
+        </div>
+
+        <!-- Quick Stats Footer -->
+        <div class="quick-stats">
+            <div class="quick-stat">
+                <div class="label">Average Response Time</div>
+                <div class="value" id="avgResponse">32ms</div>
+            </div>
+            <div class="quick-stat">
+                <div class="label">Peak Hour</div>
+                <div class="value" id="peakHour">17:00</div>
+            </div>
+            <div class="quick-stat">
+                <div class="label">Success Rate</div>
+                <div class="value" id="successRate">98.5%</div>
+            </div>
+            <div class="quick-stat">
+                <div class="label">Total Revenue</div>
+                <div class="value" id="totalRevenue">₹12.4L</div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Notification Container -->
+    <div id="notificationContainer" class="notification-container"></div>
+
+    <!-- Scripts -->
+    <script src="https://unpkg.com/aos@2.3.1/dist/aos.js"></script>
+    <script src="script.js"></script>
+    
+    <script>
+        // Initialize AOS
+        AOS.init({
+            duration: 1000,
+            once: true,
+            offset: 100
+        });
+
+        // Dashboard specific JavaScript
+        document.addEventListener('DOMContentLoaded', function() {
+            initializeDashboard();
+            loadDashboardData();
+            setupEventListeners();
+        });
+
+        function initializeDashboard() {
+            // Initialize charts with sample data
+            initializeFraudChart();
+            initializeVehicleChart();
+            initializeHourlyChart();
+            initializePerformanceChart();
+            
+            // Load sample transactions
+            loadSampleTransactions();
+        }
+
+        function initializeFraudChart() {
+            const ctx = document.getElementById('fraudChart').getContext('2d');
+            new Chart(ctx, {
+                type: 'doughnut',
+                data: {
+                    labels: ['Class Mismatch', 'Unregistered', 'Invalid Plate', 'Duplicate Entry', 'Speeding'],
+                    datasets: [{
+                        data: [45, 30, 15, 7, 3],
+                        backgroundColor: [
+                            '#f94144',
+                            '#f8961e',
+                            '#f9c74f',
+                            '#90be6d',
+                            '#577590'
+                        ],
+                        borderWidth: 0,
+                        hoverOffset: 10
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    cutout: '70%',
+                    plugins: {
+                        legend: {
+                            display: false
+                        },
+                        tooltip: {
+                            callbacks: {
+                                label: function(context) {
+                                    return `${context.label}: ${context.raw}%`;
+                                }
+                            }
+                        }
+                    },
+                    animation: {
+                        animateScale: true,
+                        animateRotate: true
+                    }
+                }
+            });
+            
+            // Add legend
+            const legend = document.getElementById('fraudLegend');
+            legend.innerHTML = `
+                <div class="legend-item">
+                    <div class="legend-color" style="background: #f94144;"></div>
+                    <span>Class Mismatch (45%)</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color" style="background: #f8961e;"></div>
+                    <span>Unregistered (30%)</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color" style="background: #f9c74f;"></div>
+                    <span>Invalid Plate (15%)</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color" style="background: #90be6d;"></div>
+                    <span>Duplicate (7%)</span>
+                </div>
+                <div class="legend-item">
+                    <div class="legend-color" style="background: #577590;"></div>
+                    <span>Speeding (3%)</span>
+                </div>
+            `;
+        }
+
+        function initializeVehicleChart() {
+            const ctx = document.getElementById('vehicleChart').getContext('2d');
+            new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: ['Car', 'Motorcycle', 'Bus', 'Truck', 'Bicycle'],
+                    datasets: [{
+                        label: 'Number of Vehicles',
+                        data: [450, 180, 95, 75, 30],
+                        backgroundColor: [
+                            'rgba(67, 97, 238, 0.8)',
+                            'rgba(76, 201, 240, 0.8)',
+                            'rgba(248, 150, 30, 0.8)',
+                            'rgba(249, 65, 68, 0.8)',
+                            'rgba(144, 190, 109, 0.8)'
+                        ],
+                        borderRadius: 8
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: false
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            grid: {
+                                display: false
+                            }
+                        },
+                        x: {
+                            grid: {
+                                display: false
+                            }
+                        }
+                    },
+                    animation: {
+                        duration: 2000,
+                        easing: 'easeInOutQuart'
+                    }
+                }
+            });
+            
+            // Add progress bars
+            const progress = document.getElementById('vehicleProgress');
+            progress.innerHTML = `
+                <div class="progress-item">
+                    <div class="progress-header">
+                        <span>Cars</span>
+                        <span>450</span>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: 90%"></div>
+                    </div>
+                </div>
+                <div class="progress-item">
+                    <div class="progress-header">
+                        <span>Motorcycles</span>
+                        <span>180</span>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: 36%"></div>
+                    </div>
+                </div>
+                <div class="progress-item">
+                    <div class="progress-header">
+                        <span>Buses</span>
+                        <span>95</span>
+                    </div>
+                    <div class="progress-bar">
+                        <div class="progress-fill" style="width: 19%"></div>
+                    </div>
+                </div>
+            `;
+        }
+
+        function initializeHourlyChart() {
+            const ctx = document.getElementById('hourlyChart').getContext('2d');
+            new Chart(ctx, {
+                type: 'line',
+                data: {
+                    labels: ['00:00', '04:00', '08:00', '12:00', '16:00', '20:00'],
+                    datasets: [{
+                        label: 'Transactions',
+                        data: [15, 8, 45, 78, 92, 55],
+                        borderColor: '#f8961e',
+                        backgroundColor: 'rgba(248, 150, 30, 0.1)',
+                        tension: 0.4,
+                        fill: true,
+                        pointBackgroundColor: '#f8961e',
+                        pointBorderColor: '#fff',
+                        pointBorderWidth: 2,
+                        pointRadius: 6,
+                        pointHoverRadius: 8
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: false
+                        }
+                    },
+                    scales: {
+                        y: {
+                            beginAtZero: true,
+                            grid: {
+                                color: 'rgba(0, 0, 0, 0.05)'
+                            }
+                        },
+                        x: {
+                            grid: {
+                                display: false
+                            }
+                        }
+                    },
+                    animation: {
+                        duration: 2000,
+                        easing: 'easeInOutQuart'
+                    }
+                }
+            });
+            
+            // Add hourly stats
+            document.getElementById('hourlyStats').innerHTML = `
+                <div class="quick-stat">
+                    <div class="label">Peak Hour</div>
+                    <div class="value">16:00-17:00</div>
+                </div>
+                <div class="quick-stat">
+                    <div class="label">Peak Volume</div>
+                    <div class="value">92</div>
+                </div>
+                <div class="quick-stat">
+                    <div class="label">Off-Peak</div>
+                    <div class="value">04:00</div>
+                </div>
+                <div class="quick-stat">
+                    <div class="label">Average</div>
+                    <div class="value">49/hr</div>
+                </div>
+            `;
+        }
+
+        function initializePerformanceChart() {
+            const ctx = document.getElementById('performanceChart').getContext('2d');
+            new Chart(ctx, {
+                type: 'radar',
+                data: {
+                    labels: ['Detection', 'OCR', 'Fraud Detection', 'Speed', 'Accuracy', 'Reliability'],
+                    datasets: [{
+                        label: 'Performance',
+                        data: [98, 95, 92, 96, 99, 94],
+                        backgroundColor: 'rgba(67, 97, 238, 0.2)',
+                        borderColor: '#4361ee',
+                        pointBackgroundColor: '#4361ee',
+                        pointBorderColor: '#fff',
+                        pointBorderWidth: 2,
+                        pointRadius: 5
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: {
+                        legend: {
+                            display: false
+                        }
+                    },
+                    scales: {
+                        r: {
+                            beginAtZero: true,
+                            max: 100,
+                            ticks: {
+                                stepSize: 20,
+                                callback: function(value) {
+                                    return value + '%';
+                                }
+                            }
+                        }
+                    },
+                    animation: {
+                        duration: 2000,
+                        easing: 'easeInOutQuart'
+                    }
+                }
+            });
+        }
+
+        function loadSampleTransactions() {
+            const tbody = document.getElementById('transactionsBody');
+            
+            const sampleData = [
+                { time: '2024-01-15 14:23:45', plate: 'DL5CAB1234', vehicle: 'Car', fraud: 'Class Mismatch', confidence: 98, status: 'fraud' },
+                { time: '2024-01-15 14:22:30', plate: 'MH12AB5678', vehicle: 'Truck', fraud: 'None', confidence: 99, status: 'verified' },
+                { time: '2024-01-15 14:21:15', plate: 'KA01CD9012', vehicle: 'Motorcycle', fraud: 'Unregistered', confidence: 95, status: 'fraud' },
+                { time: '2024-01-15 14:20:00', plate: 'TN07EF3456', vehicle: 'Bus', fraud: 'None', confidence: 100, status: 'verified' },
+                { time: '2024-01-15 14:18:45', plate: 'GJ06GH7890', vehicle: 'Car', fraud: 'Invalid Plate', confidence: 92, status: 'fraud' },
+                { time: '2024-01-15 14:17:30', plate: 'UP14IJ2345', vehicle: 'Truck', fraud: 'None', confidence: 98, status: 'verified' },
+                { time: '2024-01-15 14:16:15', plate: 'WB02KL6789', vehicle: 'Car', fraud: 'Duplicate Entry', confidence: 96, status: 'fraud' },
+                { time: '2024-01-15 14:15:00', plate: 'HR26MN1234', vehicle: 'Motorcycle', fraud: 'None', confidence: 97, status: 'verified' }
+            ];
+            
+            tbody.innerHTML = '';
+            
+            sampleData.forEach(item => {
+                const row = document.createElement('tr');
+                row.innerHTML = `
+                    <td>${item.time}</td>
+                    <td>
+                        <span style="font-weight: 600; font-family: monospace;">${item.plate}</span>
+                    </td>
+                    <td>
+                        <i class="fas fa-${item.vehicle === 'Car' ? 'car' : 
+                                         item.vehicle === 'Motorcycle' ? 'motorcycle' : 
+                                         item.vehicle === 'Truck' ? 'truck' : 'bus'}" 
+                           style="margin-right: 5px; color: var(--dashboard-primary);"></i>
+                        ${item.vehicle}
+                    </td>
+                    <td>${item.fraud}</td>
+                    <td>
+                        <span class="confidence-badge">${item.confidence}%</span>
+                    </td>
+                    <td>
+                        <span class="status-badge status-${item.status}">
+                            <i class="fas ${item.status === 'verified' ? 'fa-check-circle' : 'fa-exclamation-circle'}"></i>
+                            ${item.status.charAt(0).toUpperCase() + item.status.slice(1)}
+                        </span>
+                    </td>
+                    <td>
+                        <button class="icon-btn" onclick="viewDetails('${item.plate}')" data-tooltip="View Details">
+                            <i class="fas fa-eye"></i>
+                        </button>
+                        <button class="icon-btn" onclick="exportTransaction('${item.plate}')" data-tooltip="Export">
+                            <i class="fas fa-download"></i>
+                        </button>
+                    </td>
+                `;
+                tbody.appendChild(row);
+            });
+        }
+
+        function setupEventListeners() {
+            document.getElementById('refreshData').addEventListener('click', function() {
+                showNotification('Dashboard data refreshed', 'success');
+                loadSampleTransactions();
+            });
+            
+            document.getElementById('exportData').addEventListener('click', function() {
+                exportDashboardData();
+            });
+            
+            document.getElementById('timeRange').addEventListener('change', function() {
+                showNotification('Time range updated', 'info');
+            });
+        }
+
+        function loadDashboardData() {
+            // Simulate loading data
+            setTimeout(() => {
+                document.getElementById('totalVehicles').textContent = '830';
+                document.getElementById('totalFraud').textContent = '87';
+                document.getElementById('fraudRate').textContent = '10.5%';
+                document.getElementById('lastUpdated').textContent = new Date().toLocaleString();
+            }, 1000);
+        }
+
+        function exportDashboardData() {
+            const data = {
+                timestamp: new Date().toISOString(),
+                stats: {
+                    totalVehicles: document.getElementById('totalVehicles').textContent,
+                    totalFraud: document.getElementById('totalFraud').textContent,
+                    fraudRate: document.getElementById('fraudRate').textContent
+                }
+            };
+            
+            const blob = new Blob([JSON.stringify(data, null, 2)], { type: 'application/json' });
+            const url = URL.createObjectURL(blob);
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = `smarttag-dashboard-${Date.now()}.json`;
+            a.click();
+            
+            showNotification('Dashboard data exported successfully', 'success');
+        }
+
+        function viewDetails(plate) {
+            showNotification(`Viewing details for ${plate}`, 'info');
+        }
+
+        function exportTransaction(plate) {
+            showNotification(`Exporting transaction for ${plate}`, 'success');
+        }
+
+        function showNotification(message, type) {
+            const container = document.getElementById('notificationContainer');
+            const notification = document.createElement('div');
+            notification.className = `notification ${type}`;
+            notification.innerHTML = `
+                <i class="fas ${type === 'success' ? 'fa-check-circle' : 
+                               type === 'error' ? 'fa-exclamation-circle' : 
+                               'fa-info-circle'}"></i>
+                <span>${message}</span>
+            `;
+            container.appendChild(notification);
+            
+            setTimeout(() => {
+                notification.remove();
+            }, 3000);
+        }
+    </script>
+</body>
+</html>
